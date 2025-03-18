@@ -23,6 +23,21 @@ export interface RegisterData extends UserCredentials {
 // Register a new user
 export async function registerUser(userData: RegisterData): Promise<User | null> {
   try {
+    console.log("Registering user:", userData.email);
+    
+    // Check if user already exists
+    const existingUsers = await executeQuery<any[]>(
+      'SELECT * FROM users WHERE email = ?',
+      [userData.email]
+    );
+    
+    if (existingUsers && existingUsers.length > 0) {
+      console.error('User already exists');
+      const error = new Error('Email already in use');
+      (error as any).code = 'ER_DUP_ENTRY';
+      throw error;
+    }
+    
     // Hash the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(userData.password, salt);
@@ -51,6 +66,8 @@ export async function registerUser(userData: RegisterData): Promise<User | null>
 // Login user
 export async function loginUser(credentials: UserCredentials): Promise<User | null> {
   try {
+    console.log("Logging in user:", credentials.email);
+    
     // Find user by email
     const users = await executeQuery<any[]>(
       'SELECT * FROM users WHERE email = ?',
@@ -60,7 +77,14 @@ export async function loginUser(credentials: UserCredentials): Promise<User | nu
     const user = users[0];
     
     // If user not found or password doesn't match
-    if (!user || !(await bcrypt.compare(credentials.password, user.password_hash))) {
+    if (!user) {
+      console.log("User not found");
+      return null;
+    }
+    
+    const isPasswordValid = await bcrypt.compare(credentials.password, user.password_hash);
+    if (!isPasswordValid) {
+      console.log("Password doesn't match");
       return null;
     }
     

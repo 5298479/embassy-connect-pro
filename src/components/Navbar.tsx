@@ -7,14 +7,16 @@ import { useAuth } from "@/contexts/AuthContext";
 export const Navbar = () => {
   const { user, logout } = useAuth();
   
+  console.log("Navbar rendering, user:", user);
+  
   return (
     <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex">
             <Link to="/" className="flex items-center">
-              <span className="text-2xl font-bold text-embassy-primary">EmbassyConnect</span>
-              <span className="text-2xl font-bold text-embassy-accent">Pro</span>
+              <span className="text-2xl font-bold text-primary">EmbassyConnect</span>
+              <span className="text-2xl font-bold text-accent">Pro</span>
             </Link>
           </div>
           <div className="flex items-center gap-4">
@@ -41,7 +43,7 @@ export const Navbar = () => {
                   <Button variant="ghost">Login</Button>
                 </Link>
                 <Link to="/register">
-                  <Button className="bg-embassy-primary hover:bg-embassy-primary/90">Register</Button>
+                  <Button className="bg-primary hover:bg-primary/90">Register</Button>
                 </Link>
               </>
             )}

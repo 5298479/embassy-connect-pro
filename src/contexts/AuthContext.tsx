@@ -23,7 +23,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Check if user is already logged in via localStorage
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setCurrentUser(JSON.parse(storedUser));
+      try {
+        setCurrentUser(JSON.parse(storedUser));
+      } catch (e) {
+        console.error("Failed to parse stored user", e);
+        localStorage.removeItem('user');
+      }
     }
     setLoading(false);
   }, []);
@@ -32,19 +37,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setLoading(true);
       setError(null);
+      console.log("Attempting login for:", credentials.email);
       const user = await loginUser(credentials);
       
       if (user) {
+        console.log("Login successful");
         setCurrentUser(user);
         localStorage.setItem('user', JSON.stringify(user));
         return true;
       } else {
+        console.log("Login failed");
         setError('Invalid email or password');
         return false;
       }
     } catch (error) {
+      console.error("Login error:", error);
       setError('An error occurred during login');
-      console.error(error);
       return false;
     } finally {
       setLoading(false);
@@ -55,23 +63,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setLoading(true);
       setError(null);
+      console.log("Attempting registration for:", data.email);
       const user = await registerUser(data);
       
       if (user) {
+        console.log("Registration successful");
         setCurrentUser(user);
         localStorage.setItem('user', JSON.stringify(user));
         return true;
       } else {
+        console.log("Registration failed");
         setError('Registration failed');
         return false;
       }
     } catch (error: any) {
+      console.error("Registration error:", error);
       if (error.code === 'ER_DUP_ENTRY') {
         setError('Email already in use');
       } else {
         setError('An error occurred during registration');
       }
-      console.error(error);
       return false;
     } finally {
       setLoading(false);
@@ -79,20 +90,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = () => {
+    console.log("Logging out");
     setCurrentUser(null);
     localStorage.removeItem('user');
   };
 
+  const value = {
+    currentUser, 
+    user: currentUser, // alias for compatibility
+    loading, 
+    error, 
+    login, 
+    register, 
+    logout
+  };
+
   return (
-    <AuthContext.Provider value={{ 
-      currentUser, 
-      user: currentUser, // alias for compatibility
-      loading, 
-      error, 
-      login, 
-      register, 
-      logout 
-    }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
