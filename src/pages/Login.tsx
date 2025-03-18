@@ -3,10 +3,69 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Facebook, Mail } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Facebook, Mail, AlertCircle } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const { login, error } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !password) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const success = await login({ email, password });
+      
+      if (success) {
+        toast({
+          title: "Login Successful",
+          description: "Welcome back to EmbassyConnect Pro!",
+        });
+        navigate("/dashboard");
+      } else {
+        toast({
+          title: "Login Failed",
+          description: error || "Invalid email or password",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSocialLogin = (provider: string) => {
+    toast({
+      title: "Social Login",
+      description: `${provider} login is not implemented yet`,
+    });
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md">
@@ -16,7 +75,10 @@ const Login = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <Button variant="outline">
+            <Button 
+              variant="outline" 
+              onClick={() => handleSocialLogin("Google")}
+            >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -37,7 +99,10 @@ const Login = () => {
               </svg>
               Google
             </Button>
-            <Button variant="outline">
+            <Button 
+              variant="outline"
+              onClick={() => handleSocialLogin("Facebook")}
+            >
               <Facebook className="mr-2 h-4 w-4" />
               Facebook
             </Button>
@@ -50,19 +115,45 @@ const Login = () => {
               <span className="bg-white px-2 text-muted-foreground">Or continue with</span>
             </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="m@example.com" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input 
+                id="password" 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            
+            <Button 
+              type="submit" 
+              className="w-full bg-embassy-primary hover:bg-embassy-primary/90"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                "Signing In..."
+              ) : (
+                <>
+                  <Mail className="mr-2 h-4 w-4" /> Sign In with Email
+                </>
+              )}
+            </Button>
+          </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button className="w-full bg-embassy-primary hover:bg-embassy-primary/90">
-            <Mail className="mr-2 h-4 w-4" /> Sign In with Email
-          </Button>
           <div className="text-sm text-center text-muted-foreground">
             Don't have an account?{" "}
             <Link to="/register" className="text-embassy-primary hover:underline">
