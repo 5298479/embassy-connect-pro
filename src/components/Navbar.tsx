@@ -2,8 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Navbar = () => {
+  const { user, logout } = useAuth();
+  
   return (
     <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,12 +22,29 @@ export const Navbar = () => {
               <Search className="h-4 w-4 mr-2" />
               Search Embassies
             </Button>
-            <Link to="/login">
-              <Button variant="ghost">Login</Button>
-            </Link>
-            <Link to="/register">
-              <Button className="bg-embassy-primary hover:bg-embassy-primary/90">Register</Button>
-            </Link>
+            
+            {user ? (
+              <>
+                <Link to="/dashboard">
+                  <Button variant="ghost">Dashboard</Button>
+                </Link>
+                <Button 
+                  variant="outline" 
+                  onClick={logout}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button variant="ghost">Login</Button>
+                </Link>
+                <Link to="/register">
+                  <Button className="bg-embassy-primary hover:bg-embassy-primary/90">Register</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
