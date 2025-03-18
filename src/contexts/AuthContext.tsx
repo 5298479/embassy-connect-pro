@@ -4,6 +4,7 @@ import { User, loginUser, registerUser, RegisterData, UserCredentials } from '@/
 
 interface AuthContextType {
   currentUser: User | null;
+  user: User | null; // alias for currentUser
   loading: boolean;
   error: string | null;
   login: (credentials: UserCredentials) => Promise<boolean>;
@@ -83,7 +84,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, loading, error, login, register, logout }}>
+    <AuthContext.Provider value={{ 
+      currentUser, 
+      user: currentUser, // alias for compatibility
+      loading, 
+      error, 
+      login, 
+      register, 
+      logout 
+    }}>
       {children}
     </AuthContext.Provider>
   );
