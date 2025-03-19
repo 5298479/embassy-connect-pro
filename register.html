@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - EmbassyConnect Pro</title>
+    <meta name="description" content="Create your EmbassyConnect Pro account." />
+    <meta name="author" content="EmbassyConnect Pro" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="container">
+          <div class="navbar-brand">
+            <a href="index.html">
+              <span class="brand-name">EmbassyConnect</span>
+              <span class="brand-pro">Pro</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <a href="index.html" class="back-btn">Back to Home</a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="auth-container">
+        <div class="auth-card">
+          <h1>Create an Account</h1>
+          <form id="registerForm" class="auth-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required placeholder="Enter your first name">
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required placeholder="Enter your last name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required placeholder="Create a password">
+            </div>
+            <button type="submit" class="submit-btn">Register</button>
+          </form>
+          <div class="auth-footer">
+            <p>Already have an account? <a href="login.html">Login</a></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2023 EmbassyConnect Pro. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast" style="display: none;">
+      <div class="toast-content">
+        <p id="toastMessage"></p>
+      </div>
+      <button id="toastClose" class="toast-close">×</button>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

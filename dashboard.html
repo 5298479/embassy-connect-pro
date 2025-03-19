@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - EmbassyConnect Pro</title>
+    <meta name="description" content="Manage your embassy applications and documents." />
+    <meta name="author" content="EmbassyConnect Pro" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <header>
+      <nav class="navbar">
+        <div class="container">
+          <div class="navbar-brand">
+            <a href="index.html">
+              <span class="brand-name">EmbassyConnect</span>
+              <span class="brand-pro">Pro</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <button class="search-button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              Search Embassies
+            </button>
+            <div class="user-menu">
+              <span id="userGreeting">Welcome!</span>
+              <button class="logout-btn" id="logoutButton">Logout</button>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="dashboard-container">
+        <div class="container">
+          <div class="dashboard-header">
+            <h1>Dashboard</h1>
+            <p>Manage your embassy applications and documents</p>
+          </div>
+          
+          <div class="dashboard-stats">
+            <div class="stat-card">
+              <h3>Active Applications</h3>
+              <p class="stat-number">3</p>
+            </div>
+            <div class="stat-card">
+              <h3>Upcoming Appointments</h3>
+              <p class="stat-number">2</p>
+            </div>
+            <div class="stat-card">
+              <h3>Documents</h3>
+              <p class="stat-number">12</p>
+            </div>
+          </div>
+          
+          <div class="dashboard-content">
+            <div class="dashboard-section">
+              <h2>Recent Applications</h2>
+              <div class="applications-list">
+                <div class="application-card">
+                  <div class="application-header">
+                    <h3>Tourist Visa - Japan</h3>
+                    <span class="status pending">Pending</span>
+                  </div>
+                  <p class="application-date">Submitted: June 15, 2023</p>
+                  <div class="application-actions">
+                    <button class="view-btn">View Details</button>
+                  </div>
+                </div>
+                
+                <div class="application-card">
+                  <div class="application-header">
+                    <h3>Student Visa - Canada</h3>
+                    <span class="status in-progress">In Progress</span>
+                  </div>
+                  <p class="application-date">Submitted: May 22, 2023</p>
+                  <div class="application-actions">
+                    <button class="view-btn">View Details</button>
+                  </div>
+                </div>
+                
+                <div class="application-card">
+                  <div class="application-header">
+                    <h3>Work Visa - Germany</h3>
+                    <span class="status approved">Approved</span>
+                  </div>
+                  <p class="application-date">Submitted: April 10, 2023</p>
+                  <div class="application-actions">
+                    <button class="view-btn">View Details</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="dashboard-section">
+              <h2>Upcoming Appointments</h2>
+              <div class="appointments-list">
+                <div class="appointment-card">
+                  <div class="appointment-date">
+                    <span class="month">JUL</span>
+                    <span class="day">12</span>
+                  </div>
+                  <div class="appointment-details">
+                    <h3>Document Submission - US Embassy</h3>
+                    <p>10:30 AM - 123 Diplomatic Avenue</p>
+                  </div>
+                  <div class="appointment-actions">
+                    <button class="reschedule-btn">Reschedule</button>
+                  </div>
+                </div>
+                
+                <div class="appointment-card">
+                  <div class="appointment-date">
+                    <span class="month">AUG</span>
+                    <span class="day">05</span>
+                  </div>
+                  <div class="appointment-details">
+                    <h3>Visa Interview - UK Embassy</h3>
+                    <p>2:15 PM - 456 Consulate Road</p>
+                  </div>
+                  <div class="appointment-actions">
+                    <button class="reschedule-btn">Reschedule</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <p>&copy; 2023 EmbassyConnect Pro. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast" style="display: none;">
+      <div class="toast-content">
+        <p id="toastMessage"></p>
+      </div>
+      <button id="toastClose" class="toast-close">×</button>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
