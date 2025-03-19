@@ -1,6 +1,6 @@
 
 // DOM Elements
-const authButtons = document.getElementById('authButtons');
+const authButtons = document.querySelector('.auth-buttons');
 const userMenu = document.getElementById('userMenu');
 const logoutButton = document.getElementById('logoutButton');
 const loginForm = document.getElementById('loginForm');
@@ -10,8 +10,13 @@ const toastMessage = document.getElementById('toastMessage');
 const toastClose = document.getElementById('toastClose');
 const userGreeting = document.getElementById('userGreeting');
 
+// Initialize Firebase
+const firebase = initializeFirebase();
+
 // Show toast notification
 function showToast(message, duration = 3000) {
+  if (!toast || !toastMessage) return;
+  
   toastMessage.textContent = message;
   toast.style.display = 'flex';
   
@@ -22,9 +27,6 @@ function showToast(message, duration = 3000) {
 
 // Check if user is logged in
 function checkAuth() {
-  // Initialize Firebase
-  const firebase = initializeFirebase();
-  
   // Set up auth state listener
   onAuthStateChanged((user) => {
     if (user) {
@@ -90,11 +92,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('password').value;
       
       try {
-        await loginUser(email, password);
-        showToast('Login successful');
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1000);
+        const user = await loginUser(email, password);
+        if (user) {
+          showToast('Login successful');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1000);
+        } else {
+          showToast('Login failed: Invalid credentials');
+        }
       } catch (error) {
         showToast('Login failed: ' + error.message);
       }
@@ -112,11 +118,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('password').value;
       
       try {
-        await registerUser(firstName, lastName, email, password);
-        showToast('Registration successful');
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 1000);
+        const user = await registerUser(firstName, lastName, email, password);
+        if (user) {
+          showToast('Registration successful');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 1000);
+        } else {
+          showToast('Registration failed: Unknown error');
+        }
       } catch (error) {
         showToast('Registration failed: ' + error.message);
       }
