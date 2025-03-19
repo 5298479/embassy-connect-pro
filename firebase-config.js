@@ -1,12 +1,13 @@
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCywzEAAjt3tyED4OvRygvl4I-qvFx5uk0",
+  authDomain: "embassy-connect-pro.firebaseapp.com",
+  projectId: "embassy-connect-pro",
+  storageBucket: "embassy-connect-pro.firebasestorage.app",
+  messagingSenderId: "900708378334",
+  appId: "1:900708378334:web:4ec9b4848cf03cbfa7444f",
+  measurementId: "G-7VGCKRFTX2"
 };
 
 // Initialize Firebase
