@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+body {
+  display: flex; justify-content: center; align-items: center;
+  height: 100vh; background: #000; color: #fff;
+}
+
+.container { text-align: center; }
+
+.welcome {
+  font-size: 28px; color: gold; margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(255,215,0,0.6);
+}
+
+.form-box {
+  width: 380px; background: #111; padding: 40px;
+  border-radius: 15px; position: relative; overflow: hidden;
+  border: 2px solid transparent;
+}
+
+/* animated border – IMPORTANT: don't block clicks */
+.form-box::before {
+  content: ''; position: absolute; inset: 0; border-radius: 15px;
+  padding: 2px; pointer-events: none; /* <-- key fix */
+  background: linear-gradient(90deg, gold, black, gold, black, gold);
+  background-size: 400%; animation: borderMove 6s linear infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+
+@keyframes borderMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.buttons { display: flex; justify-content: space-around; margin-bottom: 20px; }
+
+.buttons button {
+  flex: 1; padding: 10px; background: transparent; border: none;
+  color: #aaa; font-size: 16px; cursor: pointer; transition: 0.3s;
+}
+
+.buttons .active { border-bottom: 2px solid gold; color: gold; }
+
+.form-wrapper {
+  position: relative; width: 100%;
+  min-height: 340px;
+  overflow: hidden;
+}
+
+/* slide panels */
+.form {
+  position: absolute; top: 0; left: 0; width: 100%;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+.btn {
+  margin-top: 50px;   /* space above button */
+}
+/* default: show login */
+#loginForm { transform: translateX(0); opacity: 1; pointer-events: auto; z-index: 2; }
+#registerForm { transform: translateX(100%); opacity: 0; pointer-events: none; z-index: 1; }
+
+/* when register is active */
+.form-box.show-register #loginForm { transform: translateX(-100%); opacity: 0; pointer-events: none; z-index: 1; }
+.form-box.show-register #registerForm { transform: translateX(0); opacity: 1; pointer-events: auto; z-index: 2; }
+
+.input-box { position: relative; margin: 20px 0; }
+
+.input-box input {
+  width: 100%; padding: 10px; border: none; outline: none;
+  background: transparent; border-bottom: 2px solid #555;
+  color: #fff; font-size: 16px; transition: 0.3s;
+}
+
+.input-box input:focus { border-bottom: 2px solid gold; }
+
+.input-box label {
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  color: #aaa; pointer-events: none; transition: 0.3s;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+  top: -10px; font-size: 12px; color: gold;
+}
+
+.btn {
+  width: 100%; padding: 12px; border: none; background: gold; color: black;
+  border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: 600; transition: 0.3s;
+}
+
+.btn:hover { background: #ffd700cc; }

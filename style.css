@@ -1,0 +1,118 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #0B0C10;
+    color: white;
+    height: 100vh;
+}
+
+.top-left {
+    margin: 60px 40px; /* shifted slightly down */
+}
+
+h1 {
+    font-size: 2.8rem;
+    color: #FFD700;
+    opacity: 0;
+    animation: fadeIn 1.2s ease forwards;
+}
+
+.text {
+    font-size: 1.1rem;
+    max-width: 600px;
+    color: #CCCCCC;
+    line-height: 1.5;
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 1.2s ease forwards;
+    animation-delay: 0.3s;
+}
+
+.center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* Button styles */
+.btn {
+    margin-top: 20px;
+    padding: 12px 24px;
+    background-color: #FFD700;
+    color: #0B0C10;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    opacity: 0;
+    animation: fadeIn 1.2s ease forwards;
+}
+
+.btn:hover {
+    background-color: #FFC107;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Typing animation cursor */
+.typing::after {
+    content: '|';
+    animation: blink 0.6s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+/* Paragraph slide-up animation */
+.slide-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s ease forwards;
+}
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Button slide-up + fade-in */
+.slide-up-fade {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUpFade 1s ease forwards;
+}
+
+@keyframes slideUpFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Slide-up animation for paragraphs with delay before typing */
+.slide-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUp 0.6s ease forwards;
+    animation-delay: 0.2s; /* starts just before typing */
+}
+
+@keyframes slideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
