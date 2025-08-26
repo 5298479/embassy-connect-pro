@@ -15,10 +15,17 @@ body {
 }
 
 .form-box {
-  width: 380px; background: #111; padding: 40px;
-  border-radius: 15px; position: relative; overflow: hidden;
+  width: 100%;
+  max-width: 380px; /* limit on large screens */
+  background: #111;
+  padding: 40px;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
   border: 2px solid transparent;
+  margin: 0 15px; /* small side padding for very narrow screens */
 }
+
 
 /* animated border – IMPORTANT: don't block clicks */
 .form-box::before {
@@ -94,3 +101,25 @@ body {
 }
 
 .btn:hover { background: #ffd700cc; }
+
+@media (max-width: 420px) {
+  .form-box {
+    padding: 25px;
+  }
+  .welcome {
+    font-size: 22px;
+  }
+  .buttons button {
+    font-size: 14px;
+    padding: 8px;
+  }
+  .input-box input {
+    font-size: 14px;
+    padding: 8px;
+  }
+  .btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
