@@ -102,24 +102,4 @@ body {
 
 .btn:hover { background: #ffd700cc; }
 
-@media (max-width: 420px) {
-  .form-box {
-    padding: 25px;
-  }
-  .welcome {
-    font-size: 22px;
-  }
-  .buttons button {
-    font-size: 14px;
-    padding: 8px;
-  }
-  .input-box input {
-    font-size: 14px;
-    padding: 8px;
-  }
-  .btn {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
 
