@@ -32,7 +32,6 @@ body {
   padding: 40px;
   border-radius: 15px;
   position: relative;
-  overflow: hidden;
   border: 2px solid transparent;
   margin: 0 15px;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); /* soft glow */
