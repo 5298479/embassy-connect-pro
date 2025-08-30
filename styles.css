@@ -16,43 +16,23 @@ body {
 
 .form-box {
   width: 100%;
-  max-width: 380px; /* limit on large screens */
+  max-width: 380px;
   background: #111;
   padding: 40px;
   border-radius: 15px;
   position: relative;
   overflow: hidden;
   border: 2px solid transparent;
-  margin: 0 15px; /* small side padding for very narrow screens */
+  margin: 0 15px;
 }
 
-
-/* animated border – IMPORTANT: don't block clicks */
-.form-box {
-  width: 90%;       /* default for small devices */
-  max-width: 380px; /* restrict max width */
-  background: #111; 
-  padding: 40px;
-  border-radius: 15px; 
-  position: relative; 
-  overflow: hidden;
-  border: 2px solid transparent;
-}
-
-/* For tablets and small laptops */
+/* Responsive widths */
 @media (min-width: 768px) {
-  .form-box {
-    width: 420px;   /* slightly wider */
-  }
+  .form-box { width: 420px; }
 }
-
-/* For desktops and large screens */
 @media (min-width: 1024px) {
-  .form-box {
-    width: 500px;   /* much wider on Windows/large screens */
-  }
+  .form-box { width: 500px; }
 }
-
 
 .buttons { display: flex; justify-content: space-around; margin-bottom: 20px; }
 
@@ -74,9 +54,8 @@ body {
   position: absolute; top: 0; left: 0; width: 100%;
   transition: transform 0.6s ease, opacity 0.6s ease;
 }
-.btn {
-  margin-top: 50px;   /* space above button */
-}
+.btn { margin-top: 50px; }
+
 /* default: show login */
 #loginForm { transform: translateX(0); opacity: 1; pointer-events: auto; z-index: 2; }
 #registerForm { transform: translateX(100%); opacity: 0; pointer-events: none; z-index: 1; }
@@ -85,31 +64,36 @@ body {
 .form-box.show-register #loginForm { transform: translateX(-100%); opacity: 0; pointer-events: none; z-index: 1; }
 .form-box.show-register #registerForm { transform: translateX(0); opacity: 1; pointer-events: auto; z-index: 2; }
 
-.input-box { position: relative; margin: 20px 0; }
+/* INPUT + FLOATING LABEL FIX */
+.input-box { position: relative; margin: 25px 0; }
 
 .input-box input {
-  width: 100%; padding: 10px; border: none; outline: none;
+  width: 100%; padding: 14px 10px 8px; /* extra top padding for label space */
+  border: none; outline: none;
   background: transparent; border-bottom: 2px solid #555;
   color: #fff; font-size: 16px; transition: 0.3s;
 }
 
-.input-box input:focus { border-bottom: 2px solid gold; }
-
-.input-box label {
-  position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-  color: #aaa; pointer-events: none; transition: 0.3s;
+/* gold underline animation */
+.input-box input:focus {
+  border-bottom: 2px solid gold;
 }
 
+.input-box label {
+  position: absolute; left: 10px; top: 14px; /* aligned with padding */
+  color: #aaa; pointer-events: none;
+  font-size: 16px; transition: 0.3s ease;
+}
+
+/* float label up when focused or has content */
 .input-box input:focus ~ label,
 .input-box input:valid ~ label {
-  top: -10px; font-size: 12px; color: gold;
+  top: -8px; left: 0;
+  font-size: 12px; color: gold;
 }
 
 .btn {
   width: 100%; padding: 12px; border: none; background: gold; color: black;
   border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: 600; transition: 0.3s;
 }
-
 .btn:hover { background: #ffd700cc; }
-
-
