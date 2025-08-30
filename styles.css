@@ -1,16 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap');
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+  font-family: 'Poppins', sans-serif; 
+}
 
 body {
-  display: flex; justify-content: center; align-items: center;
-  height: 100vh; background: #000; color: #fff;
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  height: 100vh; 
+  background: #000; 
+  color: #fff;
 }
 
 .container { text-align: center; }
 
 .welcome {
-  font-size: 28px; color: gold; margin-bottom: 20px;
+  font-size: 28px; 
+  color: gold; 
+  margin-bottom: 20px;
   text-shadow: 0 0 10px rgba(255,215,0,0.6);
 }
 
@@ -24,6 +35,13 @@ body {
   overflow: hidden;
   border: 2px solid transparent;
   margin: 0 15px;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); /* soft glow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
 }
 
 /* Responsive widths */
@@ -33,67 +51,136 @@ body {
 @media (min-width: 1024px) {
   .form-box { width: 500px; }
 }
-
-.buttons { display: flex; justify-content: space-around; margin-bottom: 20px; }
-
-.buttons button {
-  flex: 1; padding: 10px; background: transparent; border: none;
-  color: #aaa; font-size: 16px; cursor: pointer; transition: 0.3s;
+/* Extra small screen fix */
+@media (max-width: 360px) {
+  .form-box { padding: 25px; }
 }
 
-.buttons .active { border-bottom: 2px solid gold; color: gold; }
+.buttons { 
+  display: flex; 
+  justify-content: space-around; 
+  margin-bottom: 20px; 
+}
+
+.buttons button {
+  flex: 1; 
+  padding: 10px; 
+  background: transparent; 
+  border: none;
+  color: #aaa; 
+  font-size: 16px; 
+  cursor: pointer; 
+  transition: 0.3s;
+}
+
+.buttons .active { 
+  border-bottom: 2px solid gold; 
+  color: gold; 
+}
 
 .form-wrapper {
-  position: relative; width: 100%;
+  position: relative; 
+  width: 100%;
   min-height: 340px;
   overflow: hidden;
 }
 
 /* slide panels */
 .form {
-  position: absolute; top: 0; left: 0; width: 100%;
+  position: absolute; 
+  top: 0; left: 0; 
+  width: 100%;
   transition: transform 0.6s ease, opacity 0.6s ease;
 }
 .btn { margin-top: 50px; }
 
 /* default: show login */
-#loginForm { transform: translateX(0); opacity: 1; pointer-events: auto; z-index: 2; }
-#registerForm { transform: translateX(100%); opacity: 0; pointer-events: none; z-index: 1; }
+#loginForm { 
+  transform: translateX(0); 
+  opacity: 1; 
+  pointer-events: auto; 
+  z-index: 2; 
+}
+#registerForm { 
+  transform: translateX(100%); 
+  opacity: 0; 
+  pointer-events: none; 
+  z-index: 1; 
+}
 
 /* when register is active */
-.form-box.show-register #loginForm { transform: translateX(-100%); opacity: 0; pointer-events: none; z-index: 1; }
-.form-box.show-register #registerForm { transform: translateX(0); opacity: 1; pointer-events: auto; z-index: 2; }
+.form-box.show-register #loginForm { 
+  transform: translateX(-100%); 
+  opacity: 0; 
+  pointer-events: none; 
+  z-index: 1; 
+}
+.form-box.show-register #registerForm { 
+  transform: translateX(0); 
+  opacity: 1; 
+  pointer-events: auto; 
+  z-index: 2; 
+}
 
 /* INPUT + FLOATING LABEL FIX */
-.input-box { position: relative; margin: 25px 0; }
+.input-box { 
+  position: relative; 
+  margin: 25px 0; 
+}
 
 .input-box input {
-  width: 100%; padding: 14px 10px 8px; /* extra top padding for label space */
-  border: none; outline: none;
-  background: transparent; border-bottom: 2px solid #555;
-  color: #fff; font-size: 16px; transition: 0.3s;
+  width: 100%; 
+  padding: 14px 10px 8px; 
+  border: none; 
+  outline: none;
+  background: transparent; 
+  border-bottom: 2px solid #555;
+  color: #fff; 
+  font-size: 16px; 
+  transition: 0.3s;
 }
 
 /* gold underline animation */
 .input-box input:focus {
   border-bottom: 2px solid gold;
+  box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2); /* glow effect */
 }
 
 .input-box label {
-  position: absolute; left: 10px; top: 14px; /* aligned with padding */
-  color: #aaa; pointer-events: none;
-  font-size: 16px; transition: 0.3s ease;
+  position: absolute; 
+  left: 10px; 
+  top: 14px; 
+  color: #aaa; 
+  pointer-events: none;
+  font-size: 16px; 
+  transition: 0.3s ease;
 }
 
 /* float label up when focused or has content */
 .input-box input:focus ~ label,
 .input-box input:valid ~ label {
-  top: -8px; left: 0;
-  font-size: 12px; color: gold;
+  top: -8px; 
+  left: 0;
+  font-size: 12px; 
+  color: gold;
 }
 
 .btn {
-  width: 100%; padding: 12px; border: none; background: gold; color: black;
-  border-radius: 25px; cursor: pointer; font-size: 16px; font-weight: 600; transition: 0.3s;
+  width: 100%; 
+  padding: 12px; 
+  border: none; 
+  background: gold; 
+  color: black;
+  border-radius: 25px; 
+  cursor: pointer; 
+  font-size: 16px; 
+  font-weight: 600; 
+  transition: 0.3s;
 }
-.btn:hover { background: #ffd700cc; }
+.btn:hover { 
+  background: #ffd700cc; 
+  transform: scale(1.03);
+}
+.btn:active {
+  transform: scale(0.97);
+}
