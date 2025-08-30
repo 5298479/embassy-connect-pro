@@ -1,179 +1,102 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap');
 
-* { 
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box; 
-  font-family: 'Poppins', sans-serif; 
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  display:flex;justify-content:center;align-items:center;
+  height:100vh;background:#000;color:#fff;
 }
 
-body {
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-  height: 100vh; 
-  background: #000; 
-  color: #fff;
+.container{text-align:center;}
+
+.welcome{
+  font-size:28px;color:gold;margin-bottom:20px;
+  text-shadow:0 0 10px rgba(255,215,0,.6);
 }
 
-.container { text-align: center; }
-
-.welcome {
-  font-size: 28px; 
-  color: gold; 
-  margin-bottom: 20px;
-  text-shadow: 0 0 10px rgba(255,215,0,0.6);
+/* === Animated border wrapper (NEW) === */
+.form-border{
+  position:relative;display:inline-block;margin:0 15px;
+  border-radius:18px; /* slightly larger than inner box */
 }
+.form-border::before{
+  content:'';position:absolute;inset:0;border-radius:18px;
+  padding:3px;pointer-events:none;z-index:0;
+  background:linear-gradient(90deg,gold,#222,gold,#222,gold);
+  background-size:400% 100%;
+  animation:borderMove 6s linear infinite;
 
-.form-box {
-  width: 100%;
-  max-width: 380px;
-  background: #111;
-  padding: 40px;
-  border-radius: 15px;
-  position: relative;
-  border: 2px solid transparent;
-  margin: 0 15px;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); /* soft glow */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* cut out the middle so it's only a ring */
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite:xor; /* Safari */
+  mask-composite:exclude;      /* others */
 }
-
-.form-box:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+@keyframes borderMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
-/* Responsive widths */
-@media (min-width: 768px) {
-  .form-box { width: 420px; }
+/* === Inner card === */
+.form-box{
+  position:relative;z-index:1; /* sit above the ::before ring */
+  width:100%;max-width:380px;
+  background:#111;padding:40px;border-radius:15px;
+  border:none; /* border handled by wrapper */
+  box-shadow:0 0 20px rgba(255,215,0,.15);
+  transition:transform .3s ease, box-shadow .3s ease;
 }
-@media (min-width: 1024px) {
-  .form-box { width: 500px; }
-}
-@media (max-width: 360px) {
-  .form-box { padding: 25px; }
-}
-
-.buttons { 
-  display: flex; 
-  justify-content: space-around; 
-  margin-bottom: 20px; 
+.form-border:hover .form-box{
+  transform:translateY(-5px);
+  box-shadow:0 0 30px rgba(255,215,0,.3);
 }
 
-.buttons button {
-  flex: 1; 
-  padding: 10px; 
-  background: transparent; 
-  border: none;
-  color: #aaa; 
-  font-size: 16px; 
-  cursor: pointer; 
-  transition: 0.3s;
-}
+/* Responsive widths for the inner box */
+@media (min-width:768px){ .form-box{ width:420px; } }
+@media (min-width:1024px){ .form-box{ width:500px; } }
+@media (max-width:360px){ .form-box{ padding:25px; } }
 
-.buttons .active { 
-  border-bottom: 2px solid gold; 
-  color: gold; 
+.buttons{display:flex;justify-content:space-around;margin-bottom:20px;}
+.buttons button{
+  flex:1;padding:10px;background:transparent;border:none;
+  color:#aaa;font-size:16px;cursor:pointer;transition:.3s;
 }
+.buttons .active{border-bottom:2px solid gold;color:gold;}
 
-.form-wrapper {
-  position: relative; 
-  width: 100%;
-  min-height: 340px;
- }
+.form-wrapper{position:relative;width:100%;min-height:340px;overflow:hidden;}
 
-.form {
-  position: absolute; 
-  top: 0; left: 0; 
-  width: 100%;
-  transition: transform 0.6s ease, opacity 0.6s ease;
-}
-.btn { margin-top: 50px; }
+.form{position:absolute;top:0;left:0;width:100%;
+  transition:transform .6s ease, opacity .6s ease;}
+.btn{margin-top:50px;}
 
-#loginForm { 
-  transform: translateX(0); 
-  opacity: 1; 
-  pointer-events: auto; 
-  z-index: 2; 
-}
-#registerForm { 
-  transform: translateX(100%); 
-  opacity: 0; 
-  pointer-events: none; 
-  z-index: 1; 
-}
+/* default: show login */
+#loginForm{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2;}
+#registerForm{transform:translateX(100%);opacity:0;pointer-events:none;z-index:1;}
+/* when register is active */
+.form-box.show-register #loginForm{transform:translateX(-100%);opacity:0;pointer-events:none;z-index:1;}
+.form-box.show-register #registerForm{transform:translateX(0);opacity:1;pointer-events:auto;z-index:2;}
 
-.form-box.show-register #loginForm { 
-  transform: translateX(-100%); 
-  opacity: 0; 
-  pointer-events: none; 
-  z-index: 1; 
+/* Inputs + floating labels */
+.input-box{position:relative;margin:25px 0;}
+.input-box input{
+  width:100%;padding:14px 10px 8px;border:none;outline:none;
+  background:transparent;border-bottom:2px solid #555;
+  color:#fff;font-size:16px;transition:.3s;
 }
-.form-box.show-register #registerForm { 
-  transform: translateX(0); 
-  opacity: 1; 
-  pointer-events: auto; 
-  z-index: 2; 
+.input-box input:focus{border-bottom:2px solid gold;box-shadow:0 4px 8px rgba(255,215,0,.2);}
+.input-box label{
+  position:absolute;left:10px;top:14px;color:#aaa;pointer-events:none;
+  font-size:16px;transition:.3s ease;
 }
-
-/* INPUT + FLOATING LABEL FIX */
-.input-box { 
-  position: relative; 
-  margin: 25px 0; 
-}
-
-.input-box input {
-  width: 100%; 
-  padding: 14px 10px 8px; 
-  border: none; 
-  outline: none;
-  background: transparent; 
-  border-bottom: 2px solid #555;
-  color: #fff; 
-  font-size: 16px; 
-  transition: 0.3s;
-}
-
-.input-box input:focus {
-  border-bottom: 2px solid gold;
-  box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2);
-}
-
-.input-box label {
-  position: absolute; 
-  left: 10px; 
-  top: 14px; 
-  color: #aaa; 
-  pointer-events: none;
-  font-size: 16px; 
-  transition: 0.3s ease;
-}
-
-/* float label up when focused OR input has text */
+/* stay up when focused OR has content */
 .input-box input:focus ~ label,
-.input-box input:not(:placeholder-shown) ~ label {
-  top: -8px; 
-  left: 0;
-  font-size: 12px; 
-  color: gold;
+.input-box input:not(:placeholder-shown) ~ label{
+  top:-8px;left:0;font-size:12px;color:gold;
 }
 
-.btn {
-  width: 100%; 
-  padding: 12px; 
-  border: none; 
-  background: gold; 
-  color: black;
-  border-radius: 25px; 
-  cursor: pointer; 
-  font-size: 16px; 
-  font-weight: 600; 
-  transition: 0.3s;
+.btn{
+  width:100%;padding:12px;border:none;background:gold;color:#000;
+  border-radius:25px;cursor:pointer;font-size:16px;font-weight:600;transition:.3s;
 }
-.btn:hover { 
-  background: #ffd700cc; 
-  transform: scale(1.03);
-}
-.btn:active {
-  transform: scale(0.97);
-}
+.btn:hover{background:#ffd700cc;transform:scale(1.03);}
+.btn:active{transform:scale(.97);}
