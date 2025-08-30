@@ -28,21 +28,31 @@ body {
 
 
 /* animated border – IMPORTANT: don't block clicks */
-.form-box::before {
-  content: ''; position: absolute; inset: 0; border-radius: 15px;
-  padding: 2px; pointer-events: none; /* <-- key fix */
-  background: linear-gradient(90deg, gold, black, gold, black, gold);
-  background-size: 400%; animation: borderMove 6s linear infinite;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor; mask-composite: exclude;
+.form-box {
+  width: 90%;       /* default for small devices */
+  max-width: 380px; /* restrict max width */
+  background: #111; 
+  padding: 40px;
+  border-radius: 15px; 
+  position: relative; 
+  overflow: hidden;
+  border: 2px solid transparent;
 }
 
-@keyframes borderMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* For tablets and small laptops */
+@media (min-width: 768px) {
+  .form-box {
+    width: 420px;   /* slightly wider */
+  }
 }
+
+/* For desktops and large screens */
+@media (min-width: 1024px) {
+  .form-box {
+    width: 500px;   /* much wider on Windows/large screens */
+  }
+}
+
 
 .buttons { display: flex; justify-content: space-around; margin-bottom: 20px; }
 
