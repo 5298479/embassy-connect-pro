@@ -1,7 +1,16 @@
 // app.js
-// All DOM lookups/listeners inside DOMContentLoaded for safe initialization
+// Handles login/register using Firebase Authentication
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ app.js loaded; DOM ready");
+
+  // Import firebase functions from your firebaseauth.js
+  // (make sure firebaseauth.js exports auth)
+  import { auth } from "./firebaseauth.js";
+  import {
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    updateProfile,
+  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
   // Elements
   const formBox = document.querySelector(".form-box");
@@ -18,14 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // --- Switch functions (also manage ARIA) ---
+  // --- Switch functions (UI toggle) ---
   function showLogin() {
     formBox.classList.remove("show-register");
     loginBtn.classList.add("active");
     registerBtn.classList.remove("active");
     loginBtn.setAttribute("aria-selected", "true");
     registerBtn.setAttribute("aria-selected", "false");
-    // move focus to first login input for accessibility
     document.getElementById("loginEmail").focus();
   }
 
@@ -35,7 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loginBtn.classList.remove("active");
     registerBtn.setAttribute("aria-selected", "true");
     loginBtn.setAttribute("aria-selected", "false");
-    // move focus to first register input
     document.getElementById("registerName").focus();
   }
 
@@ -50,22 +57,16 @@ document.addEventListener("DOMContentLoaded", () => {
     showRegister();
   });
 
-  // --- Simple client-side validation helper ---
+  // --- Helpers ---
   function sanitize(str) {
     return String(str).trim();
   }
 
-  // Emulate submitting to server (placeholder). Replace with fetch to real API.
-  async function fakeSubmit(data, endpoint) {
-    // Simulate network delay
-    await new Promise(res => setTimeout(res, 700));
-    return { ok: true, message: `${endpoint} success (demo)` };
-  }
-
-  // Login submit handler
+  // --- Login handler ---
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     loginMessage.textContent = "";
+
     const email = sanitize(document.getElementById("loginEmail").value);
     const password = sanitize(document.getElementById("loginPassword").value);
 
@@ -74,31 +75,30 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Disable submit while processing
     const submitBtn = loginForm.querySelector("button[type='submit']");
     submitBtn.disabled = true;
     submitBtn.style.opacity = 0.8;
 
     try {
-      const res = await fakeSubmit({ email, password }, "login");
-      if (res.ok) {
-        loginMessage.textContent = "✅ Login successful (demo).";
-      } else {
-        loginMessage.textContent = res.message || "Login failed.";
-      }
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+      loginMessage.textContent = `✅ Welcome back, ${userCred.user.email}`;
+      console.log("Logged in user:", userCred.user);
+      // Redirect to homepage or dashboard
+      // window.location.href = "home.html";
     } catch (err) {
-      console.error(err);
-      loginMessage.textContent = "Network error. Try again.";
+      console.error("Login error:", err);
+      loginMessage.textContent = err.message;
     } finally {
       submitBtn.disabled = false;
       submitBtn.style.opacity = 1;
     }
   });
 
-  // Register submit handler
+  // --- Register handler ---
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     registerMessage.textContent = "";
+
     const name = sanitize(document.getElementById("registerName").value);
     const email = sanitize(document.getElementById("registerEmail").value);
     const password = sanitize(document.getElementById("registerPassword").value);
@@ -108,7 +108,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Example: minimal password strength check
     if (password.length < 6) {
       registerMessage.textContent = "Password must be at least 6 characters.";
       return;
@@ -119,26 +118,25 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.style.opacity = 0.8;
 
     try {
-      const res = await fakeSubmit({ name, email, password }, "register");
-      if (res.ok) {
-        registerMessage.textContent = "✅ Registered (demo). Now logging in...";
-        // switch back to login or clear form
-        setTimeout(() => {
-          registerForm.reset();
-          showLogin();
-        }, 1000);
-      } else {
-        registerMessage.textContent = res.message || "Registration failed.";
-      }
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCred.user, { displayName: name });
+
+      registerMessage.textContent = "✅ Registered successfully. Logging you in...";
+      console.log("New user:", userCred.user);
+
+      setTimeout(() => {
+        registerForm.reset();
+        showLogin();
+      }, 1200);
     } catch (err) {
-      console.error(err);
-      registerMessage.textContent = "Network error. Try again.";
+      console.error("Registration error:", err);
+      registerMessage.textContent = err.message;
     } finally {
       submitBtn.disabled = false;
       submitBtn.style.opacity = 1;
     }
   });
 
-  // Ensure initial focus on the first field
+  // Initial focus
   document.getElementById("loginEmail").focus();
 });
