@@ -28,27 +28,45 @@ body {
 }
 
 /* === Animated border wrapper === */
-.form-border {
-  --thickness: 3px;
-  display: inline-block;
-  padding: var(--thickness); /* space for the animated ring */
-  border-radius: 18px;
+.form-box {
+  width: 100%;
+  max-width: 380px;
+  background: #111;
+  padding: 40px;
+  border-radius: 15px;
+  position: relative;
+  border: 2px solid transparent;
+  margin: 0 15px;
 
-  background:
-    linear-gradient(#111, #111) padding-box, /* static inner background */
-    linear-gradient(90deg, gold, #222, gold, #222, gold) border-box; /* animated border */
-  
-  background-size: 100% 100%, 400% 100%; 
-  background-repeat: no-repeat;
-  background-position: 0 0, 0 50%; 
-  animation: borderMove 6s linear infinite;
+  /* Effects */
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); /* soft glow */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-@keyframes borderMove {
-  0%   { background-position: 0 0, 0% 50%; }
-  50%  { background-position: 0 0, 100% 50%; }
-  100% { background-position: 0 0, 0% 50%; }
+.form-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
 }
+
+/* Responsive widths */
+@media (min-width: 768px) {
+  .form-box {
+    width: 420px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .form-box {
+    width: 500px;
+  }
+}
+
+@media (max-width: 360px) {
+  .form-box {
+    padding: 25px;
+  }
+}
+
 
 
 /* === Inner card === */
