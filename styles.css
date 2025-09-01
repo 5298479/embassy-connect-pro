@@ -27,6 +27,26 @@ body {
   text-shadow: 0 0 10px rgba(255,215,0,0.6); 
 }
 
+/* === Animated border wrapper === */
+.form-border {
+  --thickness: 3px;
+  display: inline-block;
+  padding: var(--thickness);   /* space for the animated ring */
+  border-radius: 18px;
+  background: 
+    linear-gradient(#111, #111) padding-box,
+    linear-gradient(90deg, gold, #222, gold, #222, gold) border-box;
+  background-size: 100% 100%, 400% 100%;
+  animation: borderMove 6s linear infinite;
+}
+
+@keyframes borderMove {
+  0%   { background-position: 0% 0,    0% 50%; }
+  50%  { background-position: 0% 0,  100% 50%; }
+  100% { background-position: 0% 0,    0% 50%; }
+}
+
+/* === Inner card === */
 .form-box {
   width: 100%; 
   max-width: 380px; 
@@ -34,9 +54,7 @@ body {
   padding: 40px; 
   border-radius: 15px; 
   position: relative; 
-  border: 2px solid transparent; 
-  margin: 0 15px; 
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.15); /* soft glow */
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease; 
 }
 
@@ -142,7 +160,6 @@ body {
   animation: border-glow 1.5s infinite alternate;
 }
 
-/* Keyframes for glowing border */
 @keyframes border-glow {
   from { box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2); }
   to   { box-shadow: 0 4px 12px rgba(255, 215, 0, 0.6); }
@@ -158,7 +175,6 @@ body {
   transition: 0.3s ease; 
 }
 
-/* float label up when focused OR input has text */
 .input-box input:focus ~ label, 
 .input-box input:not(:placeholder-shown) ~ label {
   top: -8px; 
