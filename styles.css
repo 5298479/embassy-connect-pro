@@ -94,6 +94,7 @@ body {
   position: relative;
   width: 100%;
   min-height: 340px;
+  overflow: hidden;
 }
 
 .form {
