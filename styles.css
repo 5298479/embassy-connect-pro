@@ -70,12 +70,12 @@ body {
 .buttons {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .buttons button {
   flex: 1;
-  padding: 10px;
+  padding: 20px;
   background: transparent;
   border: none;
   color: #aaa;
