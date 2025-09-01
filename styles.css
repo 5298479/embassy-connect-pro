@@ -31,20 +31,25 @@ body {
 .form-border {
   --thickness: 3px;
   display: inline-block;
-  padding: var(--thickness);   /* space for the animated ring */
+  padding: var(--thickness); /* space for the animated ring */
   border-radius: 18px;
-  background: 
-    linear-gradient(#111, #111) padding-box,
-    linear-gradient(90deg, gold, #222, gold, #222, gold) border-box;
-  background-size: 100% 100%, 400% 100%;
+
+  background:
+    linear-gradient(#111, #111) padding-box, /* static inner background */
+    linear-gradient(90deg, gold, #222, gold, #222, gold) border-box; /* animated border */
+  
+  background-size: 100% 100%, 400% 100%; 
+  background-repeat: no-repeat;
+  background-position: 0 0, 0 50%; 
   animation: borderMove 6s linear infinite;
 }
 
 @keyframes borderMove {
-  0%   { background-position: 0% 0,    0% 50%; }
-  50%  { background-position: 0% 0,  100% 50%; }
-  100% { background-position: 0% 0,    0% 50%; }
+  0%   { background-position: 0 0, 0% 50%; }
+  50%  { background-position: 0 0, 100% 50%; }
+  100% { background-position: 0 0, 0% 50%; }
 }
+
 
 /* === Inner card === */
 .form-box {
