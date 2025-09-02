@@ -1,16 +1,19 @@
 // app.js
-// Handles login/register using Firebase Authentication
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ app.js loaded; DOM ready");
 
-  // Import firebase functions from your firebaseauth.js
-  // (make sure firebaseauth.js exports auth)
-  import { auth } from "./firebaseauth.js";
+  // Import firebase functions
+  import { auth, db } from "./firebaseauth.js";
   import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     updateProfile,
-  } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+  import {
+    doc,
+    setDoc,
+    serverTimestamp,
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
   // Elements
   const formBox = document.querySelector(".form-box");
@@ -20,12 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const registerForm = document.getElementById("registerForm");
   const loginMessage = document.getElementById("loginMessage");
   const registerMessage = document.getElementById("registerMessage");
-
-  // Sanity checks
-  if (!formBox || !loginBtn || !registerBtn || !loginForm || !registerForm) {
-    console.error("❌ Required elements are missing. Check HTML ids/classes.");
-    return;
-  }
 
   // --- Switch functions (UI toggle) ---
   function showLogin() {
@@ -46,7 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("registerName").focus();
   }
 
-  // Attach tab toggle events
   loginBtn.addEventListener("click", (e) => {
     e.preventDefault();
     showLogin();
@@ -57,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
     showRegister();
   });
 
-  // --- Helpers ---
   function sanitize(str) {
     return String(str).trim();
   }
@@ -83,8 +78,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const userCred = await signInWithEmailAndPassword(auth, email, password);
       loginMessage.textContent = `✅ Welcome back, ${userCred.user.email}`;
       console.log("Logged in user:", userCred.user);
-      // Redirect to homepage or dashboard
-      // window.location.href = "home.html";
+
+      // ✅ Redirect to homepage after login
+      setTimeout(() => {
+        window.location.href = "home.html"; 
+      }, 1200);
+
     } catch (err) {
       console.error("Login error:", err);
       loginMessage.textContent = err.message;
@@ -121,13 +120,22 @@ document.addEventListener("DOMContentLoaded", () => {
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCred.user, { displayName: name });
 
-      registerMessage.textContent = "✅ Registered successfully. Logging you in...";
-      console.log("New user:", userCred.user);
+      // ✅ Store user info in Firestore
+      await setDoc(doc(db, "users", userCred.user.uid), {
+        uid: userCred.user.uid,
+        name: name,
+        email: email,
+        createdAt: serverTimestamp(),
+      });
 
+      registerMessage.textContent = "✅ Registered successfully. Logging you in...";
+      console.log("New user stored in Firestore:", userCred.user);
+
+      // ✅ Redirect after successful registration
       setTimeout(() => {
-        registerForm.reset();
-        showLogin();
-      }, 1200);
+        window.location.href = "home.html"; 
+      }, 1500);
+
     } catch (err) {
       console.error("Registration error:", err);
       registerMessage.textContent = err.message;
