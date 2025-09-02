@@ -1,19 +1,20 @@
-// app.js
+// app.js (ES module)
+
+// Top-level imports — MUST be here (not inside DOMContentLoaded)
+import { auth, db } from "./firebaseauth.js";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import {
+  doc,
+  setDoc,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ app.js loaded; DOM ready");
-
-  // Import firebase functions
-  import { auth, db } from "./firebaseauth.js";
-  import {
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    updateProfile,
-  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-  import {
-    doc,
-    setDoc,
-    serverTimestamp,
-  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
   // Elements
   const formBox = document.querySelector(".form-box");
@@ -24,6 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginMessage = document.getElementById("loginMessage");
   const registerMessage = document.getElementById("registerMessage");
 
+  // Guard: fail fast if HTML doesn't match expected IDs/classes
+  if (!formBox || !loginBtn || !registerBtn || !loginForm || !registerForm) {
+    console.error("❌ Required elements missing. Check HTML ids/classes.");
+    return;
+  }
+
   // --- Switch functions (UI toggle) ---
   function showLogin() {
     formBox.classList.remove("show-register");
@@ -31,7 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
     registerBtn.classList.remove("active");
     loginBtn.setAttribute("aria-selected", "true");
     registerBtn.setAttribute("aria-selected", "false");
-    document.getElementById("loginEmail").focus();
+    const el = document.getElementById("loginEmail");
+    if (el) el.focus();
   }
 
   function showRegister() {
@@ -40,9 +48,11 @@ document.addEventListener("DOMContentLoaded", () => {
     loginBtn.classList.remove("active");
     registerBtn.setAttribute("aria-selected", "true");
     loginBtn.setAttribute("aria-selected", "false");
-    document.getElementById("registerName").focus();
+    const el = document.getElementById("registerName");
+    if (el) el.focus();
   }
 
+  // Attach tab toggle events
   loginBtn.addEventListener("click", (e) => {
     e.preventDefault();
     showLogin();
@@ -53,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showRegister();
   });
 
+  // --- Helpers ---
   function sanitize(str) {
     return String(str).trim();
   }
@@ -71,25 +82,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const submitBtn = loginForm.querySelector("button[type='submit']");
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = 0.8;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = 0.8;
+    }
 
     try {
       const userCred = await signInWithEmailAndPassword(auth, email, password);
       loginMessage.textContent = `✅ Welcome back, ${userCred.user.email}`;
       console.log("Logged in user:", userCred.user);
 
-      // ✅ Redirect to homepage after login
+      // Redirect to homepage after login
       setTimeout(() => {
-        window.location.href = "home.html"; 
+        window.location.href = "home.html";
       }, 1200);
-
     } catch (err) {
       console.error("Login error:", err);
-      loginMessage.textContent = err.message;
+      loginMessage.textContent = err.message || "Login failed";
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = 1;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = 1;
+      }
     }
   });
 
@@ -113,14 +127,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const submitBtn = registerForm.querySelector("button[type='submit']");
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = 0.8;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = 0.8;
+    }
 
     try {
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCred.user, { displayName: name });
 
-      // ✅ Store user info in Firestore
+      // Store user info in Firestore
       await setDoc(doc(db, "users", userCred.user.uid), {
         uid: userCred.user.uid,
         name: name,
@@ -128,23 +144,25 @@ document.addEventListener("DOMContentLoaded", () => {
         createdAt: serverTimestamp(),
       });
 
-      registerMessage.textContent = "✅ Registered successfully. Logging you in...";
+      registerMessage.textContent = "✅ Registered successfully. Redirecting...";
       console.log("New user stored in Firestore:", userCred.user);
 
-      // ✅ Redirect after successful registration
+      // Redirect after successful registration
       setTimeout(() => {
-        window.location.href = "home.html"; 
+        window.location.href = "home.html";
       }, 1500);
-
     } catch (err) {
       console.error("Registration error:", err);
-      registerMessage.textContent = err.message;
+      registerMessage.textContent = err.message || "Registration failed";
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.style.opacity = 1;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = 1;
+      }
     }
   });
 
   // Initial focus
-  document.getElementById("loginEmail").focus();
+  const loginEmailInput = document.getElementById("loginEmail");
+  if (loginEmailInput) loginEmailInput.focus();
 });
